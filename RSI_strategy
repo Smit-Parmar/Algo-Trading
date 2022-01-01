@@ -1,0 +1,29 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © tubpan06
+//@version=3
+strategy("RSI Algo", overlay=true)
+myPeriod = input(defval=14, type=integer, title="Period")
+myThresholdUp = input(defval=60, type=float, title="Upper Threshold")
+myThresholdDn = input(defval=40, type=float, title="Lower Threshold")
+myAlgoFlipToggle = input(defval=false, type=bool, title="Imverse Algorthim")
+myLineToggle = input(defval=true, type=bool, title="Show Lines")
+myLabelToggle = input(defval=true, type=bool, title="Show Labels")
+myRSI=rsi(close, myPeriod)
+buy = myAlgoFlipToggle ? falling(myRSI,1) and cross(myRSI, myThresholdDn) : rising(myRSI, 1) and cross(myRSI,myThresholdUp)
+sell = myAlgoFlipToggle ? rising(myRSI, 1) and cross(myRSI,myThresholdUp) : falling(myRSI,1) and cross(myRSI, myThresholdDn)
+myPosition=0
+myPosition := buy==1 ? 0 : sell==1 or myPosition[1]==1 ? 1 : 0
+trendColor = buy ? red : sell ? green : na
+
+buy_entry=myLabelToggle ? buy and myPosition[1]==1 ? low - 0.005 : na : na
+sell_entry=myLabelToggle ? sell and myPosition[1]==0 ? high + 0.005 : na : na
+
+plotshape(buy_entry, text="BUY",textcolor = green)
+plotshape(sell_entry,style=shape.triangledown, text="SELL",textcolor = red)
+strategy.entry("Open Long",strategy.long, when = buy_entry)
+strategy.exit("Exit Long", "Open Long", profit = 50, loss = 20)
+strategy.entry("Open Short", strategy.short, when = sell_entry)
+strategy.exit("Exit Short", "Open Short", profit = 50, loss = 20)
+
+alertcondition(myLabelToggle ? buy and myPosition[1]==1 ? low - 0.005 : na : na, title='buy new', message='BUY')
+alertcondition(myLabelToggle ? sell and myPosition[1]==0 ? high + 0.005 : na : na, title='sell new', message='SELL')
