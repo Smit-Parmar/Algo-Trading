@@ -1,8 +1,3 @@
-#https://in.tradingview.com/script/JS8pUAFj-RSI-Algo-Trader/
-
-// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
-// © tubpan06
-
 study("RSI Algo", overlay=true)
 myPeriod = input(defval=14, type=integer, title="Period")
 myThresholdUp = input(defval=60, type=float, title="Upper Threshold")
