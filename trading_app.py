@@ -67,7 +67,7 @@ def get_order(buy_or_sell,symbol,timeframe): #for five munite timeframe
 app = Flask(__name__)
 @app.route("/",methods=['GET', 'POST'])
 def index():
-	if not mt5.initialize(server="Exness-MT5Trial6",login=111111,password="password"):
+	if not mt5.initialize(server="your trading platofrm server",login=111111,password="password"):
 	    print("initialize() failed")
 	    mt5.shutdown()
 	else:
